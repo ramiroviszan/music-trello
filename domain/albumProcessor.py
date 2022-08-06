@@ -40,9 +40,11 @@ class AlbumProcessor:
 
     def create_lists_with_cards(self) -> None:
         for decade in self.decades:
+            print("\n\nProcessing decade: ", decade)
             albums = self.albums_by_decade[decade]
             list_id = self.board_provider.create_list(self.board_id, decade)
             for album in albums:
+                print("Album: ", album)
                 card_id = self.board_provider.create_card(list_id, card_name="{0} - {1}".format(album.year, album.name))
                 self.create_cover(card_id, album)
 

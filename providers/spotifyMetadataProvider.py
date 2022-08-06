@@ -22,18 +22,12 @@ AUTH_CODE_ERROR = 401
 
 class SpotifyMetadataProvider(AbsAlbumMetadataProvider):
 
-    def login(self) -> None:
-        try:
-            response = requests.post(spotify_auth_url, spotify_auth_headers)
-            self.token = response.json()["access_token"]
-            spotify_headers["Authorization"] = spotify_headers["Authorization"].format(token = self.token)
-        except Exception as e:
-            print("401 - Spotify Login Failed -", response.json())
-            raise ProviderException(e)
-
     def get_album_cover_url(self, name:str) -> str:
         try:
-            response = requests.get(spotify_search_url.format(search_text = name), headers=spotify_headers)
+            response = requests.get(
+                spotify_search_url.format(search_text = name),
+                headers=spotify_headers
+            )
             cover_url = response.json()["albums"]["items"][0]["images"][0]["url"]
             return cover_url
         except Exception as e:
@@ -42,4 +36,17 @@ class SpotifyMetadataProvider(AbsAlbumMetadataProvider):
                 raise ProviderException(e)
             return None
 
+    def login(self) -> None:
+        try:
+            print("Spotify Setup Started...\n")
+            response = requests.post(
+                spotify_auth_url, 
+                spotify_auth_headers
+            )
+            self.token = response.json()["access_token"]
+            spotify_headers["Authorization"] = spotify_headers["Authorization"].format(token = self.token)
+            print("Spotify Setup Completed!\n")
+        except Exception as e:
+            print("Spotify Setup Failed -", response.json())
+            raise ProviderException(e)
    
