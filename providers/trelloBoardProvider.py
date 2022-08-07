@@ -38,7 +38,6 @@ class TrelloBoardProvider(AbsBoardProvider):
             return response.json()["id"]
         except Exception as e:
             if(response.status_code == AUTH_CODE_ERROR):
-                print(response)
                 print("401 - Trello Auth Failed" )
             raise ProviderException(e)
 
@@ -97,7 +96,7 @@ class TrelloBoardProvider(AbsBoardProvider):
             self._create_headers(token)
             print("Trello Login Completed!\n")
 
-            name = input("Please enter your Organization name: ")
+            name = input("Please enter your Organization's name: ")
             self._create_organization(name)
 
             print("Trello Setup Completed!\n")
@@ -117,7 +116,7 @@ class TrelloBoardProvider(AbsBoardProvider):
         response_type="token"
 
         authorization_url = oauth.authorization_url(trello_authorize_url)
-        print("Please go here and authorize,", 
+        print("Please click here to authorize,", 
                 "{authorization_url}&scope={scope}&expiration={expiration}&name={app_name}&response_type={response_type}".format(
                     authorization_url=authorization_url,
                     expiration=expiration,
